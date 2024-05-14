@@ -50,6 +50,20 @@ def maxDepth(root: Optional[TreeNode]) -> int:
     return depth
 
 
+# #100 Same Tree
+def isSameTree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    # base cases, when both are None, when 1 or the other is None
+    if p is None and q is None:
+        return True
+    if p is None or q is None:
+        return False
+    # if the values are not equal to each other
+    if p.val != q.val:
+        return False
+    # dfs, recursively want to return if both left and right sides satisfy
+    return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
+
+
 node1 = TreeNode(3)
 node2 = TreeNode(9)
 node3 = TreeNode(20)
@@ -61,4 +75,17 @@ node1.right = node3
 node3.left = node4
 node3.right = node5
 
-print(maxDepth(node1))
+node_1 = TreeNode(1)
+node_2 = TreeNode(2)
+node_3 = TreeNode(1)
+node_4 = TreeNode(1)
+node_5 = TreeNode(1)
+node_6 = TreeNode(2)
+
+node_1.left = node_2
+node_1.right = node_3
+node_4.left = node_5
+node_4.right = node_6
+
+# print(maxDepth(node1))
+print(isSameTree(node_1, node_4))
