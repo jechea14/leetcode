@@ -41,9 +41,9 @@ def maxDepth(root: Optional[TreeNode]) -> int:
         for i in range(len(queue)):
             node: TreeNode = queue.pop(0)
             # add the nodes to the queue
-            if node.left != None:
+            if node.left is not None:
                 queue.append(node.left)
-            if node.right != None:
+            if node.right is not None:
                 queue.append(node.right)
         # increment the level
         depth += 1
@@ -62,6 +62,33 @@ def isSameTree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         return False
     # dfs, recursively want to return if both left and right sides satisfy
     return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
+
+
+# #543 Diameter of Binary Tree
+# Time O(n), Space O(n)
+def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:
+    # global variable to keep track of max depth
+    max_depth: int = 0
+
+    # depth first search (post order), start from the bottom
+    # function created to keep global max_depth from getting messed up from recursion
+    def dfs(rt: Optional[TreeNode]):
+        # python thing, refers to the outer max_depth
+        nonlocal max_depth
+        # returns 0 when node is none
+        if rt is None:
+            return 0
+        # put into variables to be used to get the sum of depths from both sides
+        left: int = dfs(rt.left)
+        right: int = dfs(rt.right)
+        current_depth: int = left + right
+        # compares current depth with max depth
+        max_depth = max(current_depth, max_depth)
+        # function returns the max depth of both sides and add 1 because going up a path counts as 1
+        return max(left, right) + 1
+    # call the dfs function
+    dfs(root)
+    return max_depth
 
 
 node1 = TreeNode(3)
