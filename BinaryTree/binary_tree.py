@@ -86,9 +86,33 @@ def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:
         max_depth = max(current_depth, max_depth)
         # function returns the max depth of both sides and add 1 because going up a path counts as 1
         return max(left, right) + 1
+
     # call the dfs function
     dfs(root)
     return max_depth
+
+
+# #101 Symmetric Tree. Time O(n), Space O(n)
+def isSymmetric(root: Optional[TreeNode]) -> bool:
+    # inner function because need left and right inputs for left and right nodes
+    # dfs
+    def dfs(left_node: TreeNode, right_node: TreeNode) -> bool:
+        # base cases
+        if not left_node and not right_node:
+            return True
+        if not left_node or not right_node:
+            return False
+
+        return (
+                # values must be equal
+                left_node.val == right_node.val and
+                # split into left side
+                dfs(left_node.left, right_node.right) and
+                # split into right side
+                dfs(left_node.right, right_node.left)
+        )
+    # call function and pass left and right nodes of the root
+    return dfs(root.left, root.right)
 
 
 node1 = TreeNode(3)
