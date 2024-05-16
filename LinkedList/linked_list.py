@@ -159,6 +159,38 @@ def reorderList(head: Optional[ListNode]) -> None:
         second = tmp2
 
 
+# #234 Palindrome Linked List
+def isPalindrome(head: Optional[ListNode]) -> bool:
+    # fast and slow pointer to find middle
+    slow: ListNode = head
+    fast: ListNode = head
+
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+    # reverse the second half of the linked list
+    second: ListNode = slow
+    prev = None
+    tmp: ListNode = second
+
+    while tmp:
+        tmp = tmp.next
+        second.next = prev
+        prev = second
+        second = tmp
+
+    # iterate through first and second halves then compare
+    # the prev pointer should be at the tail, which is why prev is used
+    first = head
+    while first and prev:
+        if first.val != prev.val:
+            return False
+        first = first.next
+        prev = prev.next
+
+    return True
+
 linked_list: LinkedList = LinkedList()
 
 linked_list.append(1)
