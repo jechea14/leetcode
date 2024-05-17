@@ -1,5 +1,6 @@
 from typing import List
 
+
 # #189 Rotate Array. Time O(n), Space O(1)
 def rotate(nums: List[int], k: int) -> None:
     """
