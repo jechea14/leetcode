@@ -1,5 +1,6 @@
 from typing import List
 
+
 # #189 Rotate Array. Time O(n), Space O(1)
 def rotate(nums: List[int], k: int) -> None:
     """
@@ -37,6 +38,32 @@ def rotate(nums: List[int], k: int) -> None:
         nums[right] = tmp
         left += 1
         right -= 1
+
+
+# #1768 Merge String Alternately
+def mergeAlternately(word1: str, word2: str) -> str:
+    result = ""
+    # start at beginning
+    p1 = 0
+    p2 = 0
+
+    # iterate through input lengths
+    while p1 < len(word1) and p2 < len(word2):
+        # concatenate character to result
+        result += word1[p1]
+        result += word2[p2]
+        # move pointers forward
+        p1 += 1
+        p2 += 1
+
+    # for arrays that are longer than the other
+    # in which it broke out of the while loop
+    # append the remaining characters to result
+    if p1 < len(word1):
+        result += word1[p1:]
+    if p2 < len(word2):
+        result += word2[p2:]
+    return result
 
 
 def main():
