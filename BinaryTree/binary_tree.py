@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 
 class TreeNode:
@@ -104,15 +104,83 @@ def isSymmetric(root: Optional[TreeNode]) -> bool:
             return False
 
         return (
-                # values must be equal
-                left_node.val == right_node.val and
-                # split into left side
-                dfs(left_node.left, right_node.right) and
-                # split into right side
-                dfs(left_node.right, right_node.left)
+            # values must be equal
+            left_node.val == right_node.val
+            and
+            # split into left side
+            dfs(left_node.left, right_node.right)
+            and
+            # split into right side
+            dfs(left_node.right, right_node.left)
         )
+
     # call function and pass left and right nodes of the root
     return dfs(root.left, root.right)
+
+
+# #617 Merge Two Binary Trees
+def mergeTrees(
+    root1: Optional[TreeNode], root2: Optional[TreeNode]
+) -> Optional[TreeNode]:
+    # recursive way
+
+    # base case
+    # if both nodes are null then return None
+    if not root1 and not root2:
+        return None
+
+    # get the values of the nodes
+    # assign value if node exists, assigns 0 if it doesn't
+    # similar to the adding linked list nodes problem
+    val1 = root1.val if root1 else 0
+    val2 = root2.val if root2 else 0
+
+    # create a new node with the summed values
+    root = TreeNode(val1 + val2)
+
+    # recurse through the result tree
+    # left of root1 and root2, pass in None if it doesn't exist
+    # right of root1 and root2, pass in None if it doesn't exist
+    root.left = mergeTrees(root1.left if root1 else None, root2.left if root2 else None)
+    root.right = mergeTrees(
+        root1.right if root1 else None, root2.right if root2 else None
+    )
+
+    # return the resulting tree
+    return root
+
+
+# #102 Binary Tree Level Traversal, Time O(n) iterate through each node once, Space O(n) using lists as extra space
+def levelOrder(root: Optional[TreeNode]) -> List[List[int]]:
+    # bfs: breadth first search
+    # go down the tree by layer
+
+    # return empty array if input is empty
+    if root is None:
+        return []
+
+    # bfs
+    queue = [root]
+    result = []
+    # while queue is not empty
+    while queue:
+        # temp array for each layer
+        temp = []
+
+        # loop through the queue length to append values by layer
+        for _ in range(len(queue)):
+
+            popped = queue.pop(0)
+            if popped.left != None:
+                queue.append(popped.left)
+
+            if popped.right != None:
+                queue.append(popped.right)
+            # append popped node to temp list for layering
+            temp.append(popped.val)
+
+        # append layer to result
+        result.append(temp)
 
 
 node1 = TreeNode(3)
@@ -139,4 +207,5 @@ node_4.left = node_5
 node_4.right = node_6
 
 # print(maxDepth(node1))
-print(isSameTree(node_1, node_4))
+# print(isSameTree(node_1, node_4))
+print(levelOrder(node1))
