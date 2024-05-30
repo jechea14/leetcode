@@ -64,6 +64,37 @@ def isSameTree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
     return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
 
 
+# #572 Subtree of Another Tree
+def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+    # use solution from leetcode #100 same tree as helper function
+    def isSameTree(root1, root2):
+        # both nodes are null so true
+        if root1 is None and root2 is None:
+            return True
+        # one node is null but the other isn't so not the same
+        if root1 is None or root2 is None:
+            return False
+        # both node values are not the same
+        if root1.val != root2.val:
+            return False
+
+        return isSameTree(root1.left, root2.left) and isSameTree(
+            root1.right, root2.right
+        )
+
+    # check if root exists before comparing sub root
+    if root is None:
+        return False
+
+    # use same tree function
+    # returns true if it is same tree
+    if isSameTree(root, subRoot):
+        return True
+
+    # recurse through left and right nodes to compare with sub root
+    return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
+
 # #543 Diameter of Binary Tree
 # Time O(n), Space O(n)
 def diameterOfBinaryTree(root: Optional[TreeNode]) -> int:
@@ -181,6 +212,58 @@ def levelOrder(root: Optional[TreeNode]) -> List[List[int]]:
 
         # append layer to result
         result.append(temp)
+
+
+# #1448 Count Good Nodes in Binary Tree.
+# T: O(n), dfs visit all nodes once
+# S: O(n) using extra memory for recursion
+def goodNodes(root: TreeNode) -> int:
+    count = 0
+    maxVal = root.val
+
+    def dfs(node, maxVal):
+        # python thing to use the global variable
+        nonlocal count
+
+        # base case
+        if node is None:
+            return
+
+        # if the current node value is greater than the max value,
+        # compare the maxval
+        # increment count of good nodes
+        if node.val >= maxVal:
+            maxVal = max(maxVal, node.val)
+            count += 1
+
+        # pre order traversal dfs for left node and right node
+        dfs(node.left, maxVal)
+        dfs(node.right, maxVal)
+
+    # call the dfs helper function with the root and maxval inputs
+    dfs(root, maxVal)
+    return count
+
+
+# #98 Validate Binary Search Tree
+def isValidBST(root: Optional[TreeNode]) -> bool:
+    min = float("-inf")
+    max = float("inf")
+
+    def recurse(root, min, max):
+        # base cases
+        if root is None:
+            return True
+        # return false if values do not satisfy bst rules
+        if root.val <= min or root.val >= max:
+            return False
+
+        # both left and right sides of tree must be true to be a valid bst
+        # pass in the min and max values to be compared when recursing
+        # pass in the current node
+        return recurse(root.left, min, root.val) and recurse(root.right, root.val, max)
+
+    return recurse(root, min, max)
 
 
 node1 = TreeNode(3)
