@@ -266,6 +266,39 @@ def isValidBST(root: Optional[TreeNode]) -> bool:
     return recurse(root, min, max)
 
 
+# #112 Path Sum
+# T: O(n), visit each node once
+# S: O(n), where n is the height of the tree
+def hasPathSum(root: Optional[TreeNode], targetSum: int) -> bool:
+    # base case of hasPathSum, if root is None then return False
+    # dfs pre order helper function
+    # go down the tree and register root node first
+    # then add current node value to sum
+    # check if curent node is a leaf node
+    # recuresively call dfs helper function
+
+    # base case
+    if root is None:
+        return False
+
+    def dfs(node, total_sum):
+        # base case
+        if node is None:
+            return False
+
+        # add the current node value with the total sum
+        total_sum += node.val
+
+        # check is the current node is the leaf
+        if node.left is None and node.right is None:
+            return total_sum == targetSum
+
+        # recurse through the left then right with passed in total sum
+        return dfs(node.left, total_sum) or dfs(node.right, total_sum)
+
+    return dfs(root, 0)
+
+
 node1 = TreeNode(3)
 node2 = TreeNode(9)
 node3 = TreeNode(20)
